@@ -1,4 +1,4 @@
-import client from '../database'
+import Client from '../database'
 import bcrypt from 'bcrypt'
 
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env
@@ -22,23 +22,21 @@ export class storeUser {
     const { firstname, lastname, username, password } = user
 
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql =
         'INSERT INTO users (firstname, lastname, username, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
       const hash = bcrypt.hashSync(password + BCRYPT_PASSWORD, parseInt(SALT_ROUNDS as string, 10))
       const result = await conn.query(sql, [firstname, lastname, username, hash])
-
       conn.release()
-
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not add new user ${firstname} ${lastname}. ${err}`)
+      throw new Error(`unable to create new user ${firstname} ${lastname}. ${err}`)
     }
   }
 
   async index(): Promise<User[]> {
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql = 'SELECT id, username, firstname, lastname FROM users'
       const result = await conn.query(sql)
       conn.release()
@@ -49,7 +47,7 @@ export class storeUser {
   }
   async read(id: number): Promise<User> {
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql = 'SELECT id, username, firstname, lastname FROM users WHERE id=($1)'
       const result = await conn.query(sql, [id])
       conn.release()
@@ -61,7 +59,7 @@ export class storeUser {
   async update(id: number, newUserData: BaseUser): Promise<User> {
     const { firstname, lastname } = newUserData
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql = 'UPDATE users SET firstname = $1, lastname = $2 WHERE id = $3 RETURNING *'
 
       const result = await conn.query(sql, [firstname, lastname, id])
@@ -74,7 +72,7 @@ export class storeUser {
 
   async deleteUser(id: number): Promise<boolean> {
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql = 'DELETE FROM users WHERE id=($1) RETURNING id, username, firstname, lastname'
       await conn.query(sql, [id])
       conn.release()
@@ -85,7 +83,7 @@ export class storeUser {
   }
   async authenticate(username: string, password: string): Promise<User | null> {
     try {
-      const conn = await client.connect()
+      const conn = await Client.connect()
       const sql = 'SELECT * FROM users WHERE username=$1'
       const result = await conn.query(sql, [username])
       if (result.rows.length > 0) {

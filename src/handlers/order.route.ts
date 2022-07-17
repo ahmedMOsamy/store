@@ -98,11 +98,10 @@ const deleteOrder = async (req: Request, res: Response) => {
   }
 }
 
-const orderRoutes = (app: Application) => {
+export default function orderRoutes(app: Application) {
   app.get('/orders', validatToken, index)
   app.post('/orders/create', validatToken, create)
   app.get('/orders/:id', validatToken, read)
   app.put('/orders/:id', validatToken, update)
   app.delete('/orders/:id', validatToken, deleteOrder)
 }
-export default orderRoutes

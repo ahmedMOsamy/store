@@ -5,12 +5,6 @@ import { Product, ProductStore } from '../../models/product'
 const storeOrders = new OrderStore()
 
 describe('Order Model', () => {
-  const user = {
-    username: 'ahmedhani',
-    firstname: 'ahmed',
-    lastname: 'hani',
-    password: 'password123'
-  } as User
   const storeClient = new storeUser()
   const storeProducts = new ProductStore()
 
@@ -25,9 +19,13 @@ describe('Order Model', () => {
   }
 
   beforeAll(async () => {
-    const createdUser = await storeClient.create(user)
-
-    user_id = createdUser.id
+    const user: User = await storeClient.create({
+      username: 'ahmedhani',
+      firstname: 'ahmed',
+      lastname: 'hani',
+      password: 'password123'
+    })
+    user_id = user.id
 
     const productItem: Product = await storeProducts.create({
       name: 'panadol 500 tab',
@@ -86,7 +84,7 @@ describe('Order Model', () => {
 
   it('show method should return the correct orders', async () => {
     const createdOrder: Order = await createOrder(order)
-    const orderInDb = await storeOrders.read(createdOrder.id as number)
+    const orderInDb = await storeOrders.read(createdOrder.id)
 
     expect(orderInDb).toEqual(createdOrder)
 
@@ -106,18 +104,18 @@ describe('Order Model', () => {
       status: false
     }
 
-    const { products, status } = await storeOrders.update(createdOrder.id as number, newOrderData)
+    const { products, status } = await storeOrders.update(createdOrder.id, newOrderData)
 
     expect(products).toEqual(newOrderData.products)
     expect(status).toEqual(newOrderData.status)
 
-    await deleteOrder(createdOrder.id as number)
+    await deleteOrder(createdOrder.id)
   })
 
   it('delete method should remove the order', async () => {
     const createdOrder: Order = await createOrder(order)
 
-    await deleteOrder(createdOrder.id as number)
+    await deleteOrder(createdOrder.id)
 
     const orderList = await storeOrders.index()
 

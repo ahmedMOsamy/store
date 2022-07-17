@@ -41,6 +41,7 @@ CREATE DATABASE store_dev;
 
 ## Set up
 
+- `docker-compose up` to start the docker container
 - `npm install` to install all dependencies
 - `npm run db-up` to set up the database
 - `npm run build` to build the app
@@ -54,6 +55,7 @@ CREATE DATABASE store_dev;
 - add a `database.json` file in the root directory and set the missing `###` parameters
 
 ```
+    "defaultEnv": { "ENV": "NODE_ENV" },
 {
   "dev": {
     "driver": "pg",
@@ -76,44 +78,50 @@ CREATE DATABASE store_dev;
 
 ## scripts:
 
-        "start": "node dist/server.js",
-        "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
-        "test": "db-migrate --env test up && ENV=test jasmine-ts --config jasmine.json || db-migrate --env test down",
-        "build": "tsc --esModuleInterop src/server.ts --outDir ./dist",
-        "db-up": "db-migrate up",
-        "db-down": "db-migrate down"
+- "start": "npm run clean && tsc && nodemon build/server.js"
+- "format": "prettier --write src/\*_/_.ts"
+- "lint": "eslint src/\*_/_.ts"
+- "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./build --onSuccess \"node ./build/server.js\""
+- "test": "db-migrate --env test up && ENV=test jasmine-ts --config jasmine.json || db-migrate --env test down"
+- "build": "tsc --esModuleInterop src/server.ts --outDir ./build"
+- "db-up": "db-migrate up"
+- "clean": "rimraf build/"
+- "db-down": "db-migrate down"
+- "db-reset": "db-migrate reset"
 
 ## dependencies:
 
-          "bcrypt": "^5.0.1",
+       "bcrypt": "^5.0.1",
         "body-parser": "^1.20.0",
-        "db-migrate": "^0.11.13",
-        "db-migrate-pg": "^1.2.2",
+        "docker-compose": "^0.23.17",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "jsonwebtoken": "^8.5.1",
         "pg": "^8.7.3",
-        "typescript": "^4.6.4
+        "typescript": "^4.7.4"
 
 ## devDependencies:
 
         "@types/bcrypt": "^5.0.0",
         "@types/express": "^4.17.13",
-        "@types/jasmine": "^4.0.3",
+        "@types/jasmine": "^3.6.3",
         "@types/jsonwebtoken": "^8.5.8",
-        "@types/node": "^17.0.35",
+        "@types/node": "^18.0.3",
         "@types/pg": "^8.6.5",
         "@types/supertest": "^2.0.12",
-        "@typescript-eslint/eslint-plugin": "^5.25.0",
-        "@typescript-eslint/parser": "^5.25.0",
-        "eslint": "^8.16.0",
+        "@typescript-eslint/eslint-plugin": "^5.30.6",
+        "@typescript-eslint/parser": "^5.30.6",
+        "db-migrate": "^0.11.13",
+        "db-migrate-pg": "^1.2.2",
+        "eslint": "^8.19.0",
         "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.0.0",
-        "jasmine": "^4.1.0",
-        "jasmine-spec-reporter": "^7.0.0",
-        "jasmine-ts": "^0.4.0",
-        "nodemon": "^2.0.16",
-        "prettier": "^2.6.2",
-        "supertest": "^6.2.3",
-        "ts-node": "^10.8.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "jasmine": "^3.6.4",
+        "jasmine-spec-reporter": "^6.0.0",
+        "jasmine-ts": "^0.3.0",
+        "nodemon": "^2.0.19",
+        "prettier": "^2.7.1",
+        "rimraf": "^3.0.2",
+        "supertest": "^6.2.4",
+        "ts-node": "^10.8.2",
         "tsc-watch": "^5.0.3"

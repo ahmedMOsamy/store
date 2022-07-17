@@ -59,11 +59,11 @@ describe('User Model', () => {
 
   it('show method should return the correct users', async () => {
     const createdUser: User = await createUser(user)
-    const userInDb = await userClient.read(createdUser.id as number)
+    const userInDb = await userClient.read(createdUser.id)
 
     expect(userInDb).toEqual(createdUser)
 
-    await deleteUser(createdUser.id as number)
+    await deleteUser(createdUser.id)
   })
 
   it('update method should update the user', async () => {

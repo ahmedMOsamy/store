@@ -36,11 +36,11 @@ describe('Product Model', () => {
     const createdProduct: Product = await createProduct(product)
 
     expect(createdProduct).toEqual({
-      id: createdProduct.id as number,
+      id: createdProduct.id,
       ...product
     })
 
-    await deleteProduct(createdProduct.id as number)
+    await deleteProduct(createdProduct.id)
   })
 
   it('index method should return a list of products', async () => {
@@ -54,7 +54,7 @@ describe('Product Model', () => {
 
   it('show method should return the correct product', async () => {
     const createdProduct: Product = await createProduct(product)
-    const productInDb = await storeProducts.read(createdProduct.id as number)
+    const productInDb = await storeProducts.read(createdProduct.id)
 
     expect(productInDb).toEqual(createdProduct)
 
@@ -79,7 +79,7 @@ describe('Product Model', () => {
   it('delete method should remove the product', async () => {
     const createdProduct: Product = await createProduct(product)
 
-    await deleteProduct(createdProduct.id as number)
+    await deleteProduct(createdProduct.id)
 
     const productList = await storeProducts.index()
 

@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 const SECRET = process.env.TOKEN_SECRET as Secret
 
 export function userToken(user: User) {
-  return jwt.sign({ user }, SECRET as string)
+  return jwt.sign({ user }, SECRET)
 }
 
 export function validatToken(req: Request, res: Response, next: NextFunction): void | boolean {
@@ -17,7 +17,7 @@ export function validatToken(req: Request, res: Response, next: NextFunction): v
   }
 
   try {
-    const token: string = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization.split(' ')[1]
 
     jwt.verify(token, SECRET)
 

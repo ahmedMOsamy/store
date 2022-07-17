@@ -38,7 +38,7 @@ describe('Product Handler', () => {
     await request.delete(`/users/${userId}`).set('Authorization', 'bearer ' + token)
   })
 
-  it('gets the create endpoint', () => {
+  it('gets the create endpoint', (done) => {
     request
       .post('/products/create')
       .send(product)
@@ -49,22 +49,25 @@ describe('Product Handler', () => {
         expect(status).toBe(200)
 
         productId = body.id
+        done()
       })
   })
 
-  it('gets the index endpoint', () => {
+  it('gets the index endpoint', (done) => {
     request.get('/products').then((res) => {
       expect(res.status).toBe(200)
+      done()
     })
   })
 
-  it('gets the read endpoint', () => {
+  it('gets the read endpoint', (done) => {
     request.get(`/products/${productId}`).then((res) => {
       expect(res.status).toBe(200)
+      done()
     })
   })
 
-  it('gets the update endpoint', () => {
+  it('gets the update endpoint', (done) => {
     const newProductData: BaseProduct = {
       ...product,
       name: 'alphentern tab',
@@ -77,15 +80,17 @@ describe('Product Handler', () => {
       .set('Authorization', 'bearer ' + token)
       .then((res) => {
         expect(res.status).toBe(200)
+        done()
       })
   })
 
-  it('gets the delete endpoint', () => {
+  it('gets the delete endpoint', (done) => {
     request
       .delete(`/products/${productId}`)
       .set('Authorization', 'bearer ' + token)
       .then((res) => {
         expect(res.status).toBe(200)
+        done()
       })
   })
 })
